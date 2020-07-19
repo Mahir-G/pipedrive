@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 import { v4 as uuid } from 'uuid';
+import Form from './form';
+import { BrowserRouter,Route, Link } from "react-router-dom";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const itemsFromBackend = [
   {id: uuid(), content: 'First Task'},
   {id: uuid(), content: 'Second Task'}
 ]
-
 const columnsFromBackend = 
   {
     [uuid()]: {
@@ -73,10 +75,13 @@ const onDragEnd = (result, columns, setColumns) => {
 };
 
 
+
 function App() {
+    
   const [columns, setColumns] = useState(columnsFromBackend);
 
   return (
+    <BrowserRouter>
     <div style={{display: 'flex', justifyContent: 'center', height: '100%'}}>
       <DragDropContext onDragEnd={result => onDragEnd(result, columns, setColumns)}>
         {Object.entries(columns).map(([id, column]) => {
@@ -99,6 +104,7 @@ function App() {
                   >
                     {column.items.map((item, index) => {
                       return (
+                        <Link>
                         <Draggable key={item.id} draggableId={item.id} index={index}>
                           {(provided, snapshot) => {
                             return (
@@ -115,11 +121,12 @@ function App() {
                                   color: 'white',
                                   ...provided.draggableProps.style
                                 }}>
-                                  {item.content}
+                                  <Route component={Form} path="/form" />
                               </div>
                             )
                           }}
                         </Draggable>
+                        </Link>
                       )
                     })}
                     {provided.placeholder}
@@ -133,6 +140,10 @@ function App() {
         })}
       </DragDropContext>
     </div>
+    <div>
+      
+      </div>
+    </BrowserRouter>
   );
 }
 
