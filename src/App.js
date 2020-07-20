@@ -4,11 +4,13 @@ import { v4 as uuid } from 'uuid';
 import Form from './form';
 import { BrowserRouter,Route, Link } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { Button } from 'reactstrap';
 
 const itemsFromBackend = [
   {id: uuid(), content: 'First Task'},
-  {id: uuid(), content: 'Second Task'}
+  {id: uuid(), content: 'Second Task'},
 ]
+
 const columnsFromBackend = 
   {
     [uuid()]: {
@@ -74,6 +76,18 @@ const onDragEnd = (result, columns, setColumns) => {
   }
 };
 
+const handleAdd = () => {
+  const coppiedItems = [...itemsFromBackend];
+  const [removed] = coppiedItems.splice(source.index, 1);
+  coppiedItems.splice(destination.index, 0, removed);
+  setColumns({
+    ...columns,
+    [uuid()]: {
+      items: coppiedItems
+    }
+  });
+
+};
 
 
 function App() {
@@ -88,6 +102,8 @@ function App() {
           return (
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <h2>{column.name}</h2>
+            <Button onClick={itemsFromBackend => itemsFromBackend.handleAdd}>+</Button>
+
             <div style={{ margin: 8 }}>
             <Droppable droppableId={id} key={id}>
               {(provided, snapshot) => {
@@ -104,8 +120,8 @@ function App() {
                   >
                     {column.items.map((item, index) => {
                       return (
-                        <Link>
                         <Draggable key={item.id} draggableId={item.id} index={index}>
+                          
                           {(provided, snapshot) => {
                             return (
                               <div 
@@ -121,12 +137,13 @@ function App() {
                                   color: 'white',
                                   ...provided.draggableProps.style
                                 }}>
-                                  <Route component={Form} path="/form" />
+                                   <Link to="/form"></Link>
+                                   <h2>Name</h2>
+                                    <Route component={Form} path="/form" />
                               </div>
                             )
                           }}
                         </Draggable>
-                        </Link>
                       )
                     })}
                     {provided.placeholder}
