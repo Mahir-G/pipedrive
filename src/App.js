@@ -76,8 +76,9 @@ const onDragEnd = (result, columns, setColumns) => {
   }
 };
 
-const handleAdd = (column, columns, setColumns, items, setItems) => {
-  const Column = column;
+const handleAdd = (id, columns, setColumns, items, setItems) => {
+  const column = columns[id];
+  console.log(column);
   
   const newItem = {id: uuid(), content: "Next Task"}
   setItems([
@@ -85,12 +86,12 @@ const handleAdd = (column, columns, setColumns, items, setItems) => {
     newItem
     ])
 
-  const updatedItems = [...Column.items];
+  const updatedItems = [...column.items];
   updatedItems.splice(updatedItems.length, 1, newItem);
   setColumns({
     ...columns,
-    [Column.id] : {
-      ...Column,
+    [id] : {
+      ...column,
       items: updatedItems
     }
   });
@@ -110,7 +111,7 @@ function App() {
           return (
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <h2>{column.name}</h2>
-            <Button onClick={id => handleAdd(column, columns, setColumns, items, setItems)}>+</Button>
+            <Button onClick={() => handleAdd(id, columns, setColumns, items, setItems)}>+</Button>
 
             <div style={{ margin: 8 }}>
             <Droppable droppableId={id} key={id}>
