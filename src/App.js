@@ -4,7 +4,7 @@ import { v4 as uuid } from 'uuid';
 import Form from './form';
 import { BrowserRouter,Route, Link } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Button } from 'reactstrap';
+import { Button, Col } from 'reactstrap';
 
 const itemsFromBackend = [
   {id: uuid(), content: 'First Task'},
@@ -76,23 +76,31 @@ const onDragEnd = (result, columns, setColumns) => {
   }
 };
 
-const handleAdd = () => {
-  const coppiedItems = [...itemsFromBackend];
-  const [removed] = coppiedItems.splice(source.index, 1);
-  coppiedItems.splice(destination.index, 0, removed);
+const handleAdd = (column, columns, setColumns, items, setItems) => {
+  const Column = column;
+  
+  const newItem = {id: uuid(), content: "Next Task"}
+  setItems([
+    ...items,
+    newItem
+    ])
+
+  const updatedItems = [...Column.items];
+  updatedItems.splice(updatedItems.length, 1, newItem);
   setColumns({
     ...columns,
-    [uuid()]: {
-      items: coppiedItems
+    [Column.id] : {
+      ...Column,
+      items: updatedItems
     }
   });
-
 };
 
 
 function App() {
     
   const [columns, setColumns] = useState(columnsFromBackend);
+  const [items, setItems] = useState(itemsFromBackend);
 
   return (
     <BrowserRouter>
@@ -102,7 +110,7 @@ function App() {
           return (
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <h2>{column.name}</h2>
-            <Button onClick={itemsFromBackend => itemsFromBackend.handleAdd}>+</Button>
+            <Button onClick={id => handleAdd(column, columns, setColumns, items, setItems)}>+</Button>
 
             <div style={{ margin: 8 }}>
             <Droppable droppableId={id} key={id}>
