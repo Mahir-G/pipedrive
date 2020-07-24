@@ -2,16 +2,17 @@ import React, { useState } from 'react';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 import { v4 as uuid } from 'uuid';
 import Form from './form';
+import VertFrom from './verticalform';
 import { BrowserRouter,Route, Link } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Button, Col } from 'reactstrap';
 
-const itemsFromBackend = [
+export const itemsFromBackend = [
   {id: uuid(), content: 'First Task'},
   {id: uuid(), content: 'Second Task'},
 ]
 
-const columnsFromBackend = 
+export const columnsFromBackend = 
   {
     [uuid()]: {
       name: 'Lead In',
@@ -39,6 +40,7 @@ const columnsFromBackend =
       profit: 0
     },
   };
+
 
 const onDragEnd = (result, columns, setColumns) => {
   if (!result.destination) return;
@@ -76,7 +78,7 @@ const onDragEnd = (result, columns, setColumns) => {
   }
 };
 
-const handleAdd = (id, columns, setColumns, items, setItems) => {
+export const handleAdd = (id, columns, setColumns, items, setItems) => {
   const column = columns[id];
   console.log(column);
   
@@ -111,10 +113,10 @@ function App() {
           return (
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <h2>{column.name}</h2>
-            <Button onClick={() => handleAdd(id, columns, setColumns, items, setItems)}>+</Button>
+            <Link to="/form" onClick={() => handleAdd(id, columns, setColumns, items, setItems)}><Link component={Form}>+</Link></Link>
 
             <div style={{ margin: 8 }}>
-            <Droppable droppableId={id} key={id}>
+            <Droppable droppableId={id} key={id} >
               {(provided, snapshot) => {
                 return (
                   <div
@@ -146,9 +148,7 @@ function App() {
                                   color: 'white',
                                   ...provided.draggableProps.style
                                 }}>
-                                   <Link to="/form"></Link>
                                    <h2>Name</h2>
-                                    <Route component={Form} path="/form" />
                               </div>
                             )
                           }}
@@ -160,13 +160,17 @@ function App() {
                 )
               }}
             </Droppable>
+            
             </div>
             </div>
           )
+          
         })}
       </DragDropContext>
     </div>
     <div>
+
+        <Route component={VertFrom} />
       
       </div>
     </BrowserRouter>

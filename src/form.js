@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter , Col, Row, Form, FormGroup, Label, Input} from 'reactstrap';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter , Col, Row, Form, FormGroup, Label, Input , Alert} from 'reactstrap';
+import {itemsFromBackend as ifb , columnsFromBackend as cfb , handleAdd}  from "./App";
 
 const ModalExample = (props) => {
   const {
     className
   } = props;
+
+
 
   const [modal, setModal] = useState(false);
 
@@ -12,11 +15,17 @@ const ModalExample = (props) => {
 
   const closeBtn = <button className="close" onClick={toggle}>&times;</button>;
 
+  const check =() => { console.log(cfb);};
+
+  const [columns, setColumns] = useState(cfb);
+  const [items, setItems] = useState(ifb);
+  
+
   return (
   <div>
     <Button color="success" onClick={toggle}>+</Button>
     <Modal isOpen={modal} toggle={toggle} className={className}>
-      <ModalHeader color='primary' toggle={toggle} close={closeBtn}>Add Lead</ModalHeader>
+      <Alert color="primary"><ModalHeader toggle={toggle} close={closeBtn}>Add Lead</ModalHeader></Alert>
       <ModalBody>
       <Form>
       <Row form>
@@ -89,7 +98,7 @@ const ModalExample = (props) => {
       </ModalBody>
       <ModalFooter>
         <Button color="success" onClick={toggle}>Save</Button>{' '}
-        <Button color="secondary" onClick={toggle}>Cancel</Button>
+        <Button color="danger" onClick={toggle}>Cancel</Button>
       </ModalFooter>
     </Modal>
   </div>
